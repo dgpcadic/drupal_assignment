@@ -31,7 +31,7 @@ class ChuckNorrisImportForm extends FormBase {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected LoggerChannelFactoryInterface $drupal_logger;
+  protected LoggerChannelFactoryInterface $drupalLogger;
 
   /**
    * Configuration Factory.
@@ -57,12 +57,12 @@ class ChuckNorrisImportForm extends FormBase {
   /**
    * Constructs a ApiSettingsForm object.
    *
-   * @param \GuzzleHttp\ClientInterface $http_client
+   * @param \GuzzleHttp\ClientInterface $httpClient
    *   The HTTP client.
    */
-  public function __construct(ClientInterface $http_client, LoggerChannelFactoryInterface $logger, Import $import, ConfigFactory $configFactory, Messenger $messenger) {
-    $this->httpClient = $http_client;
-    $this->drupal_logger = $logger;
+  public function __construct(ClientInterface $httpClient, LoggerChannelFactoryInterface $logger, Import $import, ConfigFactory $configFactory, Messenger $messenger) {
+    $this->httpClient = $httpClient;
+    $this->drupalLogger = $logger;
     $this->import = $import;
     $this->configFactory = $configFactory;
     $this->messenger = $messenger;
@@ -145,14 +145,17 @@ class ChuckNorrisImportForm extends FormBase {
           break;
         default:
           if($json_decoded['total']) {
-            $data = array_slice($json_decoded['result'], 100, 200, true);
+            $data = [];
+            foreach ($json_decoded['result'] as $item) {
+              $data[] = $this->import->mappingData($item);
+            }
             $total = $json_decoded['total'];
             $this->import->process($data);
             $this->messenger->addMessage('Imported ' . $total . ' entities!');
           }
       }
     } catch (\Exception $e) {
-      $this->drupal_logger->get('chuck_norris')->error($e->getMessage());
+      $this->drupalLogger->get('chuck_norris')->error($e->getMessage());
     }
     $form_state->setRebuild(TRUE);
   }

@@ -91,7 +91,7 @@ class ApiSettingsForm extends ConfigFormBase {
 
     $form['mapping']['cid'] = [
       '#type' => 'select',
-      '#title' => $this->t('cId'),
+      '#title' => $this->t('cid'),
       '#options' => $options,
       '#default_value' => $this->config('chuck_norris.settings')->get('cid'),
     ];

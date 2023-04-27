@@ -68,7 +68,6 @@ class Import  implements ImportInterface {
    * {@inheritdoc}
    */
   public static function add($content, array &$context) {
-
     try {
       $entity = self::createEntity($content);
       $context['results'][] = $entity->getCid();
@@ -156,13 +155,13 @@ class Import  implements ImportInterface {
     try {
       $entityStorage = \Drupal::entityTypeManager()->getStorage('chuck_norris');
       $query = $entityStorage->getQuery()
-        ->condition('cid',$data['id'])
+        ->condition('cid',$data['cid'])
         ->accessCheck(False)
         ->execute();
       $id =  reset($query);
       if(!$id) {
         $entity = $entityStorage->create([
-          'cid'        => $data['id'],
+          'cid'        => $data['cid'],
         ]);
       }else{
         $entity = $entityStorage->load($id);
@@ -196,7 +195,7 @@ class Import  implements ImportInterface {
       'url' => $data[$config->get('url')],
       'field_categories' => $data[$config->get('field_categories')],
       'changed' => $data[$config->get('changed')],
-      'created' => $data[$config->get('url')],
+      'created' => $data[$config->get('created')],
       'cid' => $data[$config->get('cid')],
       'icon_url' => $data[$config->get('icon_url')],
       'value' => $data[$config->get('value')],
