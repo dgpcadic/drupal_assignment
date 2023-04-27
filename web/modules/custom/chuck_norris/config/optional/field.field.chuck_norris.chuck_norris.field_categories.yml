@@ -1,0 +1,32 @@
+uuid: c6cd7a50-bef0-482e-8d80-5406f5e3571c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.chuck_norris.field_categories
+    - taxonomy.vocabulary.chuck_norris_category
+  module:
+    - chuck_norris
+_core:
+  default_config_hash: FRJtE8hXJNEH0KyAbGp98DKoSU8f7_TP5G0ekoiFkJM
+id: chuck_norris.chuck_norris.field_categories
+field_name: field_categories
+entity_type: chuck_norris
+bundle: chuck_norris
+label: Categories
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      chuck_norris_category: chuck_norris_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

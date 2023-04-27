@@ -1,0 +1,9 @@
+endpoint: 'https://api.chucknorris.io/jokes/random'
+endpoint_multiple: 'https://api.chucknorris.io/jokes/search?query=chuck'
+field_categories: categories
+changed: updated_at
+created: created_at
+url: url
+cid: id
+icon_url: icon_url
+value: value

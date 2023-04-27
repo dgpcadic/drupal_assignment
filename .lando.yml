@@ -1,0 +1,25 @@
+name: drupal10
+recipe: drupal10 # drupal7,drupal8,drupal9...
+config:
+  webroot: web # root folder
+  php: '8.1'   #php version
+services:
+  appserver:
+    xdebug: true
+    config:
+      php: .lando/php.ini
+    overrides:
+      environment:
+        PHP_SENDMAIL_PATH: '/usr/sbin/sendmail -S mailhog:1025'
+        PHP_IDE_CONFIG: "serverName=drupal10"
+        DRUSH_OPTIONS_URI: "http://drupal10.lndo.site"
+        DRUSH_OPTIONS_ROOT: '/app/web'
+tooling:
+  drupalcs:
+    service: appserver
+    cmd: "/app/vendor/bin/phpcs --standard=Drupal,DrupalPractice --extensions=php,module,install,theme"
+    description: Run phpcs Drupal Coding Standards against a given file or directory.
+  drupalcbf:
+    service: appserver
+    cmd: "/app/vendor/bin/phpcbf --standard=Drupal,DrupalPractice --extensions=php,module,install,theme"
+    description: Automatically fix Drupal coding standards suggestions.

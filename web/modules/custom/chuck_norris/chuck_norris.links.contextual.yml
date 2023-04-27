@@ -1,0 +1,10 @@
+entity.chuck_norris.edit_form:
+  route_name: entity.chuck_norris.edit_form
+  group: chuck_norris
+  title: Edit
+
+entity.chuck_norris.delete_form:
+  route_name: entity.chuck_norris.delete_form
+  group: chuck_norris
+  title: Delete
+  weight: 10

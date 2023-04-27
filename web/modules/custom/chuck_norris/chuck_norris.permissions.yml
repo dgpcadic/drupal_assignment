@@ -1,0 +1,11 @@
+administer chuck norris:
+  title: 'Administer chuck norris settings'
+  restrict access: true
+delete chuck norris:
+  title: Delete chuck norris
+create chuck norris:
+  title: Create chuck norris
+view chuck norris:
+  title: View chuck norris
+edit chuck norris:
+  title: Edit chuck norris

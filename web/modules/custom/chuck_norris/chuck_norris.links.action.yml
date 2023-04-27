@@ -1,0 +1,5 @@
+chuck_norris.add_form:
+  title: 'Add chuck norris'
+  route_name: entity.chuck_norris.add_form
+  appears_on:
+    - entity.chuck_norris.collection

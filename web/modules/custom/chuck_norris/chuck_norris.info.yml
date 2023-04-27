@@ -1,0 +1,6 @@
+name: Chuck norris Api Import
+type: module
+description: Provides Import function from api config endpoint to custom entity and display in Drupal 10 CMS site
+package: Custom
+configure: chuck_norris.settings_form
+core_version_requirement: ^9 || ^10

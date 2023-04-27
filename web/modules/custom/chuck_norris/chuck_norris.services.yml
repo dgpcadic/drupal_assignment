@@ -1,0 +1,4 @@
+services:
+  chuck_norris.import:
+    class: Drupal\chuck_norris\Import
+    arguments: ['@entity_type.manager','@config.factory','@messenger','@logger.factory']

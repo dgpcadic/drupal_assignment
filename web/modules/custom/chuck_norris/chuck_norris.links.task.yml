@@ -1,0 +1,22 @@
+entity.chuck_norris.settings:
+  title: 'Settings'
+  route_name: entity.chuck_norris.settings
+  base_route: entity.chuck_norris.settings
+entity.chuck_norris.view:
+  title: 'View'
+  route_name: entity.chuck_norris.canonical
+  base_route: entity.chuck_norris.canonical
+entity.chuck_norris.edit_form:
+  title: 'Edit'
+  route_name: entity.chuck_norris.edit_form
+  base_route: entity.chuck_norris.canonical
+entity.chuck_norris.delete_form:
+  title: 'Delete'
+  route_name: entity.chuck_norris.delete_form
+  base_route: entity.chuck_norris.canonical
+  weight: 10
+entity.chuck_norris.collection:
+  title: 'Chuck norriss'
+  route_name: entity.chuck_norris.collection
+  base_route: system.admin_content
+  weight: 10

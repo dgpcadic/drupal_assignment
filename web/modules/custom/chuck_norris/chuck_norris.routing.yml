@@ -1,0 +1,22 @@
+entity.chuck_norris.settings:
+  path: 'admin/structure/chuck-norris'
+  defaults:
+    _form: '\Drupal\chuck_norris\Form\ChuckNorrisSettingsForm'
+    _title: 'Chuck norris'
+  requirements:
+    _permission: 'administer chuck norris'
+chuck_norris.settings_form:
+  path: '/admin/config/development/chuck-norris-api-setting'
+  defaults:
+    _title: 'Custom Api Import settings'
+    _form: 'Drupal\chuck_norris\Form\ApiSettingsForm'
+  requirements:
+    _permission: 'administer chuck_norris configuration'
+
+chuck_norris.import_form:
+  path: '/admin/config/development/chuck-norris-import'
+  defaults:
+    _title: 'Chuck norris Api Import'
+    _form: 'Drupal\chuck_norris\Form\ChuckNorrisImportForm'
+  requirements:
+    _permission: 'administer chuck_norris configuration'

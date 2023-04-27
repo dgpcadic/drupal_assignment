@@ -1,0 +1,21 @@
+entity.chuck_norris.settings:
+  title: 'Chuck norris'
+  description: 'Configure a Chuck norris entity type.'
+  route_name:  entity.chuck_norris.settings
+  parent: system.admin_structure
+entity.chuck_norris.collection:
+  title: 'Chuck norriss'
+  description: 'List of chuck norriss.'
+  route_name: entity.chuck_norris.collection
+  parent: system.admin_content
+chuck_norris.import_form:
+  title: Chuck norris importer
+  description: 'Import data from Api.'
+  parent: system.admin_config_development
+  route_name: chuck_norris.import_form
+chuck_norris.settings_form:
+  title: Chuck norris Settings
+  description: 'Settings Chuck norris Api.'
+  parent: system.admin_config_development
+  route_name: chuck_norris.settings_form
+
