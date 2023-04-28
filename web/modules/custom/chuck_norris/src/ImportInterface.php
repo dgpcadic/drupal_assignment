@@ -5,7 +5,7 @@ namespace Drupal\chuck_norris;
 /**
  * Importer manager interface.
  */
-interface ImportInterface  {
+interface ImportInterface {
 
   /**
    * Add content.

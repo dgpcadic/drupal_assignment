@@ -146,7 +146,6 @@ class ChuckNorris extends ContentEntityBase implements ChuckNorrisInterface {
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the chuck norris was last edited.'));
 
-
     $fields['cid'] = BaseFieldDefinition::create('string')
       ->setLabel(t('cId'))
       ->setDescription(t('The Id of the Chuck norris entity.'))
@@ -188,7 +187,6 @@ class ChuckNorris extends ContentEntityBase implements ChuckNorrisInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
-
 
     $fields['url'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Url'))

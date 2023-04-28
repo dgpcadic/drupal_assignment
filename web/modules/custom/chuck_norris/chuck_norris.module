@@ -81,4 +81,3 @@ function chuck_norris_user_predelete(UserInterface $account) {
   $chuck_norriss = $storage->loadMultiple($chuck_norris_ids);
   $storage->delete($chuck_norriss);
 }
-

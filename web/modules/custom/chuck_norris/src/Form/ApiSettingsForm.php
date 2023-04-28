@@ -26,18 +26,21 @@ class ApiSettingsForm extends ConfigFormBase {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected LoggerChannelFactoryInterface $drupal_logger;
+  protected LoggerChannelFactoryInterface $drupalLogger;
 
   /**
    * Constructs a ApiSettingsForm object.
    *
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The HTTP client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   Drupal logger.
    */
   public function __construct(ClientInterface $http_client, LoggerChannelFactoryInterface $logger) {
     $this->httpClient = $http_client;
-    $this->drupal_logger = $logger;
+    $this->drupalLogger = $logger;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -47,6 +50,7 @@ class ApiSettingsForm extends ConfigFormBase {
       $container->get('logger.factory')
     );
   }
+
   /**
    * {@inheritdoc}
    */
@@ -136,7 +140,7 @@ class ApiSettingsForm extends ConfigFormBase {
       '#weight' => 100,
       '#title' => $this->t('Go to Import'),
       '#attributes' => [
-        'class' => 'button button--secondary'
+        'class' => 'button button--secondary',
       ],
       '#url' => Url::fromRoute('chuck_norris.import_form'),
     ];
@@ -163,8 +167,9 @@ class ApiSettingsForm extends ConfigFormBase {
       if ($request->getStatusCode() > 200) {
         $form_state->setErrorByName('endpoint_multiple', $this->t('Cannot request to endpoint server.'));
       }
-    } catch (\Exception $e) {
-      $this->drupal_logger->get('chuck_norris')->error($e->getMessage());
+    }
+    catch (\Exception $e) {
+      $this->drupalLogger->get('chuck_norris')->error($e->getMessage());
     }
     parent::validateForm($form, $form_state);
   }

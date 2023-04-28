@@ -7,12 +7,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides  class for Import service.
- *
  */
-class Import  implements ImportInterface {
+class Import implements ImportInterface {
 
   use StringTranslationTrait;
 
@@ -57,7 +57,7 @@ class Import  implements ImportInterface {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory service.
    */
-  public function __construct( EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config, Messenger $messenger, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config, Messenger $messenger, LoggerChannelFactoryInterface $logger_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->config = $config;
     $this->messenger = $messenger;
@@ -71,7 +71,7 @@ class Import  implements ImportInterface {
     try {
       $entity = self::createEntity($content);
       $context['results'][] = $entity->getCid();
-      $context['message'] = t('Imported Chuck norris : @id ', [
+      $context['message'] = t('Imported Chuck norris : @id', [
         '@id' => $entity->getCid(),
       ]);
     }
@@ -80,17 +80,14 @@ class Import  implements ImportInterface {
     }
   }
 
-
   /**
    * {@inheritdoc}
    */
   public static function finished(bool $success, array $results, array $operations) {
     $message = '';
-
     if ($success) {
-      $message = t('@count_added content added and @count_updated updated', [
-        '@count_added' => isset($results['added']) ? count($results['added']) : 0,
-        '@count_updated' => isset($results['updated']) ? count($results['updated']) : 0,
+      $message = t('@count_added content added', [
+        '@count_added' => count($results)
       ]);
     }
 
@@ -102,69 +99,65 @@ class Import  implements ImportInterface {
    */
   public function process($data) {
     $process = [
-      'title' =>  $this->t('Import Chuck norris'),
+      'title' => $this->t('Import Chuck norris'),
       'operations' => [],
-      'init_message' =>  $this->t('Import Chuck norris is starting.'),
-      'progress_message' =>  $this->t('Processed @current out of @total. Estimated time: @estimate.'),
-      'error_message' =>  $this->t('The process has encountered an error.'),
+      'init_message' => $this->t('Import Chuck norris is starting.'),
+      'progress_message' => $this->t('Processed @current out of @total. Estimated time: @estimate.'),
+      'error_message' => $this->t('The process has encountered an error.'),
     ];
     foreach ($data as $item) {
       $process['operations'][] = [
-        ['\Drupal\chuck_norris\Import','add'],
+        ['\Drupal\chuck_norris\Import', 'add'],
         [$item],
       ];
     }
     $process['finished'] = ['\Drupal\chuck_norris\Import', 'finished'];
     batch_set($process);
   }
+
   /**
-   * {}
+   * Doc comment.
    */
   public static function createCategory($name) {
     try {
-      $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-      $term =  $termStorage->getQuery()
-        ->condition('vid','chuck_norris_category')
-        ->condition('name',$name)
-        ->accessCheck(False)
-        ->execute();
-      $tid = reset($term);
-      if(!$tid) {
-        $term = $termStorage->create([
+      $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+      $terms = $term_storage->loadByProperties([
+        'vid' => 'chuck_norris_category',
+        'name' => $name,
+      ]);
+      $term = reset($terms);
+      if (!$term instanceof TermInterface) {
+        $term = $term_storage->create([
           'name' => $name,
           'vid' => 'chuck_norris_category',
         ]);
         $term->save();
-      }else {
-        $term = $termStorage->load($tid);
       }
       return [
         'target_id' => $term->id(),
-        'target_type' => 'taxonomy_term'
+        'target_type' => 'taxonomy_term',
       ];
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       \Drupal::logger('chuck_norris')->error($e->getMessage());
       return [];
     }
   }
 
   /**
-   * {}
+   * Doc comment.
    */
   public static function createEntity($data) {
     try {
-      $entityStorage = \Drupal::entityTypeManager()->getStorage('chuck_norris');
-      $query = $entityStorage->getQuery()
-        ->condition('cid',$data['cid'])
-        ->accessCheck(False)
-        ->execute();
-      $id =  reset($query);
-      if(!$id) {
-        $entity = $entityStorage->create([
-          'cid'        => $data['cid'],
+      $entity_storage = \Drupal::entityTypeManager()->getStorage('chuck_norris');
+      $entities = $entity_storage->loadByProperties([
+        'cid' => $data['cid'],
+      ]);
+      $entity = reset($entities);
+      if (!$entity instanceof ChuckNorrisInterface) {
+        $entity = $entity_storage->create([
+          'cid' => $data['cid'],
         ]);
-      }else{
-        $entity = $entityStorage->load($id);
       }
       $entity->url->value = $data['url'];
       $entity->value->value = $data['value'];
@@ -174,8 +167,8 @@ class Import  implements ImportInterface {
       $entity->field_categories = [];
       foreach ($data['field_categories'] as $category) {
         if ($category) {
-          $categoryArr = self::createCategory($category);
-          $entity->field_categories[] = $categoryArr;
+          $category_arr = self::createCategory($category);
+          $entity->field_categories[] = $category_arr;
         }
       }
       $entity->save();
@@ -201,4 +194,5 @@ class Import  implements ImportInterface {
       'value' => $data[$config->get('value')],
     ];
   }
+
 }

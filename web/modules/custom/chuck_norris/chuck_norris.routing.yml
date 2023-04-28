@@ -8,7 +8,7 @@ entity.chuck_norris.settings:
 chuck_norris.settings_form:
   path: '/admin/config/development/chuck-norris-api-setting'
   defaults:
-    _title: 'Custom Api Import settings'
+    _title: 'Chuck norris settings'
     _form: 'Drupal\chuck_norris\Form\ApiSettingsForm'
   requirements:
     _permission: 'administer chuck_norris configuration'

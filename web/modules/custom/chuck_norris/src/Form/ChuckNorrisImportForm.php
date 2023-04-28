@@ -2,14 +2,13 @@
 
 namespace Drupal\chuck_norris\Form;
 
+use Drupal\chuck_norris\ImportInterface;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
-use Drupal\chuck_norris\Import;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -57,16 +56,25 @@ class ChuckNorrisImportForm extends FormBase {
   /**
    * Constructs a ApiSettingsForm object.
    *
-   * @param \GuzzleHttp\ClientInterface $httpClient
+   * @param \GuzzleHttp\ClientInterface $http_client
    *   The HTTP client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   The logger factory.
+   * @param \Drupal\chuck_norris\ImportInterface $import
+   *   The importer.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
-  public function __construct(ClientInterface $httpClient, LoggerChannelFactoryInterface $logger, Import $import, ConfigFactory $configFactory, Messenger $messenger) {
-    $this->httpClient = $httpClient;
+  public function __construct(ClientInterface $http_client, LoggerChannelFactoryInterface $logger, ImportInterface $import, ConfigFactoryInterface $config_factory, MessengerInterface $messenger) {
+    $this->httpClient = $http_client;
     $this->drupalLogger = $logger;
     $this->import = $import;
-    $this->configFactory = $configFactory;
+    $this->configFactory = $config_factory;
     $this->messenger = $messenger;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -79,6 +87,7 @@ class ChuckNorrisImportForm extends FormBase {
       $container->get('messenger')
     );
   }
+
   /**
    * {@inheritdoc}
    */
@@ -118,7 +127,7 @@ class ChuckNorrisImportForm extends FormBase {
     $config = $this->configFactory->get('chuck_norris.settings');
     if (!$config->get('endpoint_multiple')||!$config->get('endpoint')) {
       $link = Url::fromRoute('chuck_norris.settings_form');
-      $form_state->setErrorByName('option', $this->t('The Config is not valid. An absolute url endpoint has to be provided. Please back to  <a href="@link">config page</a>',['@link' => $link]));
+      $form_state->setErrorByName('option', $this->t('The Config is not valid. An absolute url endpoint has to be provided. Please back to  <a href="@link">config page</a>', ['@link' => $link]));
     }
     parent::validateForm($form, $form_state);
   }
@@ -143,8 +152,9 @@ class ChuckNorrisImportForm extends FormBase {
           $entity = $this->import::createEntity($data);
           $this->messenger->addMessage('Imported Chuck norris ID: ' . $entity->id());
           break;
+
         default:
-          if($json_decoded['total']) {
+          if ($json_decoded['total']) {
             $data = [];
             foreach ($json_decoded['result'] as $item) {
               $data[] = $this->import->mappingData($item);
@@ -154,12 +164,11 @@ class ChuckNorrisImportForm extends FormBase {
             $this->messenger->addMessage('Imported ' . $total . ' entities!');
           }
       }
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->drupalLogger->get('chuck_norris')->error($e->getMessage());
     }
     $form_state->setRebuild(TRUE);
   }
-
-
 
 }
