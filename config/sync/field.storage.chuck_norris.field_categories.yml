@@ -1,0 +1,22 @@
+uuid: 0a8f829b-4e8f-4325-9e18-a25ffd1f4580
+langcode: en
+status: true
+dependencies:
+  module:
+    - chuck_norris
+    - taxonomy
+_core:
+  default_config_hash: w53SqaTSMMsimlyZpYaEZoF8yXRa0D8o_wl9JYN15JE
+id: chuck_norris.field_categories
+field_name: field_categories
+entity_type: chuck_norris
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

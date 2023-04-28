@@ -1,0 +1,10 @@
+uuid: d4d39684-7aad-4741-b00c-93fe3a88961c
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: zUmBe25MJy9bXtIh7p3iwiCYEEt0PnkTR11PNpPJoiI
+name: 'Chuck norris category'
+vid: chuck_norris_category
+description: ''
+weight: 0
